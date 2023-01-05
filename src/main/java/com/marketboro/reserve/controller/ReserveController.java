@@ -1,9 +1,10 @@
 package com.marketboro.reserve.controller;
 
-import com.marketboro.reserve.domain.item.Item;
+import com.marketboro.reserve.domain.discount.RateReservePolicy;
 import com.marketboro.reserve.domain.item.ItemDto;
 import com.marketboro.reserve.domain.member.Member;
 import com.marketboro.reserve.domain.member.MemberDto;
+import com.marketboro.reserve.service.ItemService;
 import com.marketboro.reserve.service.ReserveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ public class ReserveController {
 
     private Logger logger = LoggerFactory.getLogger(ReserveController.class);
     private final ReserveService reserveService;
+    private final ItemService itemService;
+    private final RateReservePolicy rateReservePolicy;
 
     @PostMapping("/members/new")
     public void join(String email, String password) {
@@ -33,13 +36,14 @@ public class ReserveController {
     @PostMapping("/items")
     public void order(@RequestParam("memberId") Long id, @RequestParam("name") String itemName, @RequestParam("price") int price) {
         MemberDto memberDto = reserveService.findById(id);
-        logger.info("member {}", memberDto.getId());
+        reserveService.updateReserve(memberDto, price);
+
         ItemDto itemDto = ItemDto.builder()
                         .member(new Member(memberDto))
                         .name(itemName)
                         .price(price)
                         .build();
-        reserveService.saveItem(itemDto);
+        itemService.saveItem(itemDto);
     }
 
     @GetMapping("/members")
@@ -53,7 +57,7 @@ public class ReserveController {
         return member;
     }
 
-    @GetMapping("/")
+    @GetMapping("/members/reserve")
     public void findReserveAmount() {
 
     }

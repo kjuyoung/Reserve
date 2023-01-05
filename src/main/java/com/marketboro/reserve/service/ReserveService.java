@@ -1,48 +1,36 @@
 package com.marketboro.reserve.service;
 
-import com.marketboro.reserve.domain.item.Item;
-import com.marketboro.reserve.domain.item.ItemDto;
+import com.marketboro.reserve.domain.discount.RateReservePolicy;
 import com.marketboro.reserve.domain.member.Member;
 import com.marketboro.reserve.domain.member.MemberDto;
-import com.marketboro.reserve.repository.ItemRepository;
 import com.marketboro.reserve.repository.ReserveRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
-//@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 @Service
 public class ReserveService {
 
     private final ReserveRepository reserveRepository;
-    private final ItemRepository itemRepository;
+    private final RateReservePolicy rateReservePolicy;
+    private final ModelMapper modelMapper;
 
-    public ReserveService(ReserveRepository reserveRepository,
-                          ItemRepository itemRepository) {
-        this.reserveRepository = reserveRepository;
-        this.itemRepository = itemRepository;
-    }
-
+    @Transactional
     public void save(MemberDto memberDto) {
         Member member = Member.builder()
                             .email(memberDto.getEmail())
                             .password(memberDto.getPassword())
+                            .reserve(memberDto.getReserve())
                             .build();
 
         reserveRepository.save(member);
-    }
-
-    public void saveItem(ItemDto itemDto) {
-        Item item = Item.builder()
-                .member(itemDto.getMember())
-                .name(itemDto.getName())
-                .price(itemDto.getPrice())
-                .build();
-        itemRepository.save(item);
     }
 
     public List<MemberDto> findAll() {
@@ -54,6 +42,21 @@ public class ReserveService {
 
     public MemberDto findById(Long id) {
         Optional<Member> member = reserveRepository.findById(id);
-        return member.stream().map(m -> new MemberDto(m.getId(), m.getEmail(), m.getItems(), m.getReserve())).findAny().get();
+        modelMapper.typeMap(Member.class, MemberDto.class)
+                .addMappings(mapper -> {
+                    mapper.skip(MemberDto::setPassword);
+                    mapper.skip(MemberDto::setItems);
+                    mapper.map(Member::getId, MemberDto::setId);
+                    mapper.map(Member::getEmail, MemberDto::setEmail);
+                    mapper.map(Member::getReserve, MemberDto::setReserve);
+                });
+        return modelMapper.map(member.get(), MemberDto.class);
+    }
+
+    @Transactional
+    public void updateReserve(MemberDto memberDto, int price) {
+        int reserve = rateReservePolicy.collect(price);
+        reserve += memberDto.getReserve() + reserve;
+        reserveRepository.updateReserve(memberDto.getId(), reserve);
     }
 }

@@ -4,10 +4,12 @@ import com.marketboro.reserve.domain.item.Item;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
 @Getter
 @RequiredArgsConstructor
 public class MemberDto {
@@ -17,10 +19,10 @@ public class MemberDto {
     private String email;
     private String password;
     private List<Item> items = new ArrayList<>();
-    private Long reserve;
+    private int reserve;
 
     @Builder
-    public MemberDto(Long id, String email, String password, List<Item> items, Long reserve) {
+    public MemberDto(Long id, String email, String password, List<Item> items, int reserve) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -28,7 +30,7 @@ public class MemberDto {
         this.reserve = reserve;
     }
 
-    public MemberDto(Long id, String email, List<Item> items, Long reserve) {
+    public MemberDto(Long id, String email, List<Item> items, int reserve) {
         this.id = id;
         this.email = email;
         this.items = items;
@@ -38,5 +40,9 @@ public class MemberDto {
     public MemberDto(Long id, String email) {
         this.id = id;
         this.email = email;
+    }
+
+    public void saveReserve(int reserve) {
+        this.reserve += reserve;
     }
 }

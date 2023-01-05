@@ -29,18 +29,19 @@ spring:
     password: 1234
     initialization-mode: always
 #    classpath: import.sql
+#    schema: classpath*:schema.sql
   jpa:
     generate-ddl: true
     defer-datasource-initialization: true
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-#  sql:
-#    init:
-#      data-locations=classpath: import.sql
+  sql:
+    init:
+#      schema-locations=classpath: schema.sql
 #      mode: always
 
 logging:

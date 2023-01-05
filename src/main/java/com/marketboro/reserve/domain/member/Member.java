@@ -25,13 +25,13 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    @OneToMany(mappedBy = "member")
     private List<Item> items = new ArrayList<>();
 
-    private Long reserve;
+    private int reserve;
 
     @Builder
-    public Member(Long id, String email, String password, List<Item> items, Long reserve) {
+    public Member(Long id, String email, String password, List<Item> items, int reserve) {
         this.id = id;
         this.email = email;
         this.password = password;

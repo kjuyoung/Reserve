@@ -2,11 +2,13 @@ package com.marketboro.reserve.domain.item;
 
 import com.marketboro.reserve.domain.member.Member;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "item")
+@NoArgsConstructor
 public class Item {
 
     @Id
@@ -25,5 +27,11 @@ public class Item {
         this.member = member;
         this.name = name;
         this.price = price;
+    }
+
+    //== 연관관계 메서드==//
+    public void setMember(Member member) {
+        this.member = member;
+        member.getItems().add(this);
     }
 }
