@@ -1,0 +1,74 @@
+spring:
+  profiles:
+    group:
+      local: local_config,common
+      dev:  dev_config,common
+      prod: prod_config,common
+    active: local
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+# local, dev, prod ?? ??
+#server:
+#  port: 8080
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local_config
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:13306/reserve?characterEncoding=UTF-8&useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+    initialization-mode: always
+#    classpath: import.sql
+  jpa:
+    generate-ddl: true
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+#  sql:
+#    init:
+#      data-locations=classpath: import.sql
+#      mode: always
+
+logging:
+  level:
+    org.springframework.web.client: DEBUG
+    # org.hibernate.SQL: DEBUG
+    org.hibernate.type: trace
+
+---
+database: dev_mysql
+
+spring:
+  config:
+    activate:
+      on-profile: dev_config
+  datasource:
+    url: jdbc:mysql://dev-server/dev
+    username: root
+    password: 1234
+
+---
+database: prod_mysql
+
+spring:
+  config:
+    activate:
+      on-profile: prod_config
+  datasource:
+    url: jdbc:mysql://prod-server/prod
+    username: root
+    password: 1234
