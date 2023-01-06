@@ -1,6 +1,7 @@
 package com.marketboro.reserve.domain.member;
 
-import com.marketboro.reserve.domain.item.Item;
+import com.marketboro.reserve.domain.order.Order;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "member")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
@@ -20,30 +21,21 @@ public class Member {
     @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String password;
+    private String name;
 
     @OneToMany(mappedBy = "member")
-    private List<Item> items = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     private int reserve;
 
     @Builder
-    public Member(Long id, String email, String password, List<Item> items, int reserve) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.items = items;
+    public Member(String name, int reserve) {
+        this.name = name;
         this.reserve = reserve;
     }
 
     public Member (MemberDto memberDto) {
-        this.id = memberDto.getId();
-        this.email = memberDto.getEmail();
-        this.password = memberDto.getPassword();
-        this.items = memberDto.getItems();
+        this.name = memberDto.getName();
         this.reserve = memberDto.getReserve();
     }
 }

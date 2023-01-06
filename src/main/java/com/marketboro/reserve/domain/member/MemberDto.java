@@ -1,6 +1,6 @@
 package com.marketboro.reserve.domain.member;
 
-import com.marketboro.reserve.domain.item.Item;
+import com.marketboro.reserve.domain.order.Order;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,30 +16,14 @@ public class MemberDto {
 
     private Long id;
 
-    private String email;
-    private String password;
-    private List<Item> items = new ArrayList<>();
+    private String name;
+    private List<Order> orders = new ArrayList<>();
     private int reserve;
 
-    @Builder
-    public MemberDto(Long id, String email, String password, List<Item> items, int reserve) {
+    public MemberDto(Long id, String name, int reserve) {
         this.id = id;
-        this.email = email;
-        this.password = password;
-        this.items = items;
+        this.name = name;
         this.reserve = reserve;
-    }
-
-    public MemberDto(Long id, String email, List<Item> items, int reserve) {
-        this.id = id;
-        this.email = email;
-        this.items = items;
-        this.reserve = reserve;
-    }
-
-    public MemberDto(Long id, String email) {
-        this.id = id;
-        this.email = email;
     }
 
     public void saveReserve(int reserve) {

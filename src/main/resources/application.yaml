@@ -28,7 +28,7 @@ spring:
     username: root
     password: 1234
     initialization-mode: always
-#    classpath: import.sql
+    classpath: import.sql
 #    schema: classpath*:schema.sql
   jpa:
     generate-ddl: true

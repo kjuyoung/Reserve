@@ -6,10 +6,10 @@ CREATE TABLE if not exists member (
   PRIMARY KEY (`member_id`)
 );
 
-CREATE TABLE if not exists item (
+CREATE TABLE if not exists orders (
   id bigint NOT NULL AUTO_INCREMENT,
-  name varchar(255) DEFAULT NULL,
-  price int NOT NULL,
+  itemname varchar(255) DEFAULT NULL,
+  itemprice int NOT NULL,
   member_id bigint DEFAULT NULL,
   PRIMARY KEY (id),
   KEY FKpuyun1nwd8fupsib8ekn7vrpm (member_id),

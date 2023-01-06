@@ -9,54 +9,42 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Service
 public class ReserveService {
 
     private final ReserveRepository reserveRepository;
     private final RateReservePolicy rateReservePolicy;
-    private final ModelMapper modelMapper;
+
+    public List<Member> findAll() {
+        return reserveRepository.findAll();
+    }
+
+    public Member findById(Long id) {
+        Optional<Member> member = reserveRepository.findById(id);
+        return member.get();
+    }
+
+    public int findTotalReserve(Long id) {
+        Optional<Member> member = reserveRepository.findById(id);
+        return member.get().getReserve();
+    }
 
     @Transactional
-    public void save(MemberDto memberDto) {
-        Member member = Member.builder()
-                            .email(memberDto.getEmail())
-                            .password(memberDto.getPassword())
-                            .reserve(memberDto.getReserve())
-                            .build();
+    public Long join(Member member) {
 
         reserveRepository.save(member);
-    }
-
-    public List<MemberDto> findAll() {
-        List<Member> findMembers = reserveRepository.findAll();
-        return findMembers.stream()
-                .map(m -> new MemberDto(m.getId(), m.getEmail()))
-                .collect(Collectors.toList());
-    }
-
-    public MemberDto findById(Long id) {
-        Optional<Member> member = reserveRepository.findById(id);
-        modelMapper.typeMap(Member.class, MemberDto.class)
-                .addMappings(mapper -> {
-                    mapper.skip(MemberDto::setPassword);
-                    mapper.skip(MemberDto::setItems);
-                    mapper.map(Member::getId, MemberDto::setId);
-                    mapper.map(Member::getEmail, MemberDto::setEmail);
-                    mapper.map(Member::getReserve, MemberDto::setReserve);
-                });
-        return modelMapper.map(member.get(), MemberDto.class);
+        return member.getId();
     }
 
     @Transactional
-    public void updateReserve(MemberDto memberDto, int price) {
+    public void updateReserve(Member member, int price) {
         int reserve = rateReservePolicy.collect(price);
-        reserve += memberDto.getReserve() + reserve;
-        reserveRepository.updateReserve(memberDto.getId(), reserve);
+        reserve += member.getReserve();
+        reserveRepository.updateReserve(member.getId(), reserve);
     }
 }

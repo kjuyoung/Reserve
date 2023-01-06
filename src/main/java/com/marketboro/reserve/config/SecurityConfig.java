@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/members/**").permitAll()
-                .antMatchers("/items/**").permitAll()
+                .antMatchers("/orders/**").permitAll()
 //                .requestMatchers("/members/test").hasRole("USER")
                 .anyRequest().authenticated();
 //                .and()
