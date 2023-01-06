@@ -1,6 +1,7 @@
 package com.marketboro.reserve.domain.member;
 
 import com.marketboro.reserve.domain.order.Order;
+import com.marketboro.reserve.domain.reserve.Reserve;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,16 +27,16 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
-    private int reserve;
+    private int totalReserve;
 
     @Builder
-    public Member(String name, int reserve) {
+    public Member(String name, int totalReserve) {
         this.name = name;
-        this.reserve = reserve;
+        this.totalReserve = totalReserve;
     }
 
     public Member (MemberDto memberDto) {
         this.name = memberDto.getName();
-        this.reserve = memberDto.getReserve();
+        this.totalReserve = memberDto.getTotalReserve();
     }
 }

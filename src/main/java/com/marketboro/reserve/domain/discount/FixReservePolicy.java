@@ -8,7 +8,7 @@ public class FixReservePolicy implements ReservePolicy {
     private int discountFixAmount = 1000;
 
     @Override
-    public int collect(int price) {
+    public int calculateReserve(int price) {
         return discountFixAmount;
     }
 }

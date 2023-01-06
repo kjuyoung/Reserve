@@ -12,11 +12,12 @@ public class OrderDto {
     private Member member;
     private String itemName;
     private int itemPrice;
+    private int reserve;
 
     @Builder
-    public OrderDto(Member member, String itemName, int itemPrice) {
-        this.member = member;
+    public OrderDto(String itemName, int itemPrice, int reserve) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
+        this.reserve = reserve;
     }
 }

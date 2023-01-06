@@ -8,7 +8,7 @@ public class RateReservePolicy implements ReservePolicy {
     private static final int RATEDISCOUNT = 10;
 
     @Override
-    public int collect(int price) {
+    public int calculateReserve(int price) {
         return price * RATEDISCOUNT / 100;
     }
 }

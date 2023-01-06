@@ -1,6 +1,7 @@
 package com.marketboro.reserve.domain.member;
 
 import com.marketboro.reserve.domain.order.Order;
+import com.marketboro.reserve.domain.reserve.Reserve;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,11 @@ public class MemberDto {
 
     private String name;
     private List<Order> orders = new ArrayList<>();
-    private int reserve;
+    private int totalReserve;
 
-    public MemberDto(Long id, String name, int reserve) {
+    public MemberDto(Long id, String name, int totalReserve) {
         this.id = id;
         this.name = name;
-        this.reserve = reserve;
-    }
-
-    public void saveReserve(int reserve) {
-        this.reserve += reserve;
+        this.totalReserve = totalReserve;
     }
 }
