@@ -47,7 +47,8 @@ public class MemberController {
         Member member = memberService.findById(id);
         modelMapper.typeMap(Member.class, MemberDto.class)
                 .addMappings(mapper -> {
-                    mapper.skip(MemberDto::setOrders);
+//                    mapper.skip(MemberDto::setOrders);
+                    mapper.map(Member::getOrders, MemberDto::setOrders);
                     mapper.map(Member::getId, MemberDto::setId);
                     mapper.map(Member::getName, MemberDto::setName);
                 });

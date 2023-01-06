@@ -32,14 +32,16 @@ public class OrderController {
 
         orderService.order(memberId, itemName, itemPrice);
 //        reserveService.save(memberId, itemPrice);
-        memberService.updateTotalReserve(memberId, itemPrice);
+        memberService.updateReserve(memberId, itemName, itemPrice);
+//        memberService.updateTotalReserve(memberId, itemPrice);
     }
 
     @GetMapping("/orders")
-    public List<OrderDto> findOrders() {
+    public List<Order> findOrders() {
         List<Order> findOrders = orderService.findAll();
-        return findOrders.stream()
-                .map(o -> new OrderDto(o.getItemName(), o.getItemPrice(), o.getReserve()))
-                .collect(Collectors.toList());
+        return findOrders;
+//        return findOrders.stream()
+//                .map(o -> new OrderDto(o.getItemName(), o.getItemPrice(), o.getReserve()))
+//                .collect(Collectors.toList());
     }
 }

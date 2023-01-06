@@ -2,6 +2,7 @@ package com.marketboro.reserve.service;
 
 import com.marketboro.reserve.domain.discount.RateReservePolicy;
 import com.marketboro.reserve.domain.member.Member;
+import com.marketboro.reserve.domain.order.Order;
 import com.marketboro.reserve.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,17 @@ public class MemberService {
         int reserve = rateReservePolicy.calculateReserve(price);
         reserve += findMember.get().getTotalReserve();
         memberRepository.updateReserve(findMember.get().getId(), reserve);
+    }
+
+    @Transactional
+    public void updateReserve(Long memberId, String itemName, int itemPrice) {
+        Optional<Member> findMember = memberRepository.findById(memberId);
+
+        int reserve = rateReservePolicy.calculateReserve(itemPrice);
+        Order order = Order.createOrder(findMember.get(), itemName, itemPrice, reserve);
+        findMember.get().saveOrder(order);
+        reserve += findMember.get().getTotalReserve();
+        findMember.get().setTotalReserve(reserve);
+        memberRepository.save(findMember.get());
     }
 }
