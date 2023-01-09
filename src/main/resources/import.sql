@@ -1,2 +1,17 @@
 insert into member(name, total_reserve) values('member_A', 0);
-insert into member(name, total_reserve) values('member_B', 0);
+insert into member(name, total_reserve) values('member_B', 15000);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(1, 'book20', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(2, 'book21', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(3, 'book22', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(4, 'book23', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(5, 'book24', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(6, 'book25', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(7, 'book26', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(8, 'book27', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(9, 'book28', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(10, 'book29', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(11, 'book30', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(12, 'book31', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(13, 'book32', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(14, 'book33', 10000, 1000, 2);
+insert into orders(id, item_name, item_price, reserve_fund, member_id) values(15, 'book34', 10000, 1000, 2);

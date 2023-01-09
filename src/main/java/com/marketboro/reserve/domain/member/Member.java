@@ -24,10 +24,21 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Reserve> reserves = new ArrayList<>();
+
     private int totalReserve;
 
     public void saveOrder(Order order) {
         this.orders.add(order);
+    }
+
+    public void saveReserve(Reserve reserve) {
+        this.reserves.add(reserve);
+    }
+
+    public void changeTotalReserve(int totalReserve) {
+        this.totalReserve = totalReserve;
     }
 
     @Builder

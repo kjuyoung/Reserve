@@ -23,31 +23,29 @@ public class Order {
 
     private String itemName;
     private int itemPrice;
-    private int reserve;
+    private int reserveFund;
 
     @Builder
-    public Order(Member member, String itemName, int itemPrice, int reserve) {
+    public Order(Member member, String itemName, int itemPrice, int reserveFund) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
-        this.reserve = reserve;
+        this.reserveFund = reserveFund;
         if(member != null) {
             setMember(member);
         }
     }
 
-    //== 연관관계 메서드==//
-    public void saveMember(Member member) {
-        this.member = member;
-        member.getOrders().add(this);
-    }
-
     //==생성 메서드==//
-    public static Order createOrder(Member member, String itemName, int itemPrice, int reserve) {
+    public static Order createOrder(Member member, String itemName, int itemPrice, int reserveFund) {
         Order order = new Order();
-        order.saveMember(member);
+        order.setMember(member);
         order.setItemName(itemName);
         order.setItemPrice(itemPrice);
-        order.setReserve(reserve);
+        order.setReserveFund(reserveFund);
         return order;
+    }
+
+    public void changeReserveFund(int reserveFund) {
+        this.reserveFund = reserveFund;
     }
 }

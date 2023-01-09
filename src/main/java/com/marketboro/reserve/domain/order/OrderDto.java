@@ -1,23 +1,19 @@
 package com.marketboro.reserve.domain.order;
 
-import com.marketboro.reserve.domain.member.Member;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class OrderDto {
 
     private Long id;
-
-    private Member member;
     private String itemName;
     private int itemPrice;
-    private int reserve;
+    private int reserveFund;
 
-    @Builder
-    public OrderDto(String itemName, int itemPrice, int reserve) {
+    public OrderDto(Long id, String itemName, int itemPrice, int reserveFund) {
+        this.id = id;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
-        this.reserve = reserve;
+        this.reserveFund = reserveFund;
     }
 }

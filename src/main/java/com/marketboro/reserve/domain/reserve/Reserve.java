@@ -1,14 +1,18 @@
 package com.marketboro.reserve.domain.reserve;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marketboro.reserve.domain.member.Member;
-import lombok.*;
+import com.marketboro.reserve.domain.order.Order;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Getter @Setter
 @Entity
-@Table(name = "reserves")
+@Table(name = "reserve")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reserve {
 
@@ -16,23 +20,22 @@ public class Reserve {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    private int amount;
+    private int usedReserve;
 
-    //== 연관관계 메서드==//
-//    public void saveMember(Member member) {
-//        this.member = member;
-//        member.getReserves().add(this);
-//    }
+    public Reserve(int usedReserve) {
+        this.usedReserve = usedReserve;
+    }
 
     //==생성 메서드==//
-//    public static Reserve createReserve(Member member, int amount) {
-//        Reserve reserve = new Reserve();
-//        reserve.saveMember(member);
-//        reserve.setAmount(amount);
-//        return reserve;
-//    }
+    public static Reserve createReserve(Member member, int usedReserve) {
+        Reserve reserve = new Reserve();
+        reserve.setMember(member);
+        reserve.setUsedReserve(usedReserve);
+        return reserve;
+    }
 }

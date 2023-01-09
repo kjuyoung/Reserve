@@ -1,19 +1,17 @@
 package com.marketboro.reserve.controller;
 
-import com.marketboro.reserve.domain.discount.RateReservePolicy;
-import com.marketboro.reserve.domain.member.Member;
-import com.marketboro.reserve.domain.member.MemberDto;
-import com.marketboro.reserve.domain.reserve.Reserve;
+import com.marketboro.reserve.domain.order.OrderDto;
+import com.marketboro.reserve.domain.reserve.ReserveDto;
 import com.marketboro.reserve.service.MemberService;
-import com.marketboro.reserve.service.ReserveService;
-import lombok.Data;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -21,60 +19,71 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1")
 public class MemberController {
 
-    private final ReserveService reserveService;
     private final MemberService memberService;
-    private final ModelMapper modelMapper;
 
-    @PostMapping("/members/new")
-    public String create(String name) {
-        Member member = Member.builder()
-                .name(name)
-                .build();
-        memberService.join(member);
-        return "redirect:/";
+    /**
+     * 회원별 적립금 합계 조회 API
+     * @param memberId
+     * @return
+     */
+    @GetMapping("/members/{id}/total-reserve")
+    public ResponseEntity<Integer> findTotalReserve(@PathVariable("id") Long memberId) {
+
+        return ResponseEntity.ok(memberService.findTotalReserve(memberId));
     }
 
-    @GetMapping("/members")
-    public List<MemberDto> findMembers() {
-        List<Member> findMembers = memberService.findAll();
-        return findMembers.stream()
-                .map(m -> new MemberDto(m.getId(), m.getName(), m.getTotalReserve()))
-                .collect(Collectors.toList());
+    /**
+     * 회원별 적립금 적립 API
+     * @param memberId
+     * @param itemName
+     * @param itemPrice
+     */
+    @PostMapping("/members/{id}/reserve")
+    public void order(@RequestParam("memberId") Long memberId
+            , @RequestParam("itemName") String itemName
+            , @RequestParam("itemPrice") int itemPrice) {
+
+        memberService.saveReserve(memberId, itemName, itemPrice);
     }
 
-    @GetMapping("/members/{id}")
-    public MemberDto findMember(@PathVariable("id") Long id) {
-        Member member = memberService.findById(id);
-        modelMapper.typeMap(Member.class, MemberDto.class)
-                .addMappings(mapper -> {
-//                    mapper.skip(MemberDto::setOrders);
-                    mapper.map(Member::getOrders, MemberDto::setOrders);
-                    mapper.map(Member::getId, MemberDto::setId);
-                    mapper.map(Member::getName, MemberDto::setName);
-                });
-        return modelMapper.map(member, MemberDto.class);
+    /**
+     * 회원별 적립금 적립 내역 조회 API
+     * @param memberId
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/members/{id}/reserve/usage-details")
+    public ResponseEntity<List<OrderDto>> historySaveReserve(@RequestParam Long memberId,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "20") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+
+        return ResponseEntity.ok(memberService.historySaveReserve(memberId, pageRequest));
     }
 
-    @GetMapping("/members/{id}/reserve")
-    public int findTotalReserve(@PathVariable("id") Long id) {
-        return memberService.findTotalReserve(id);
+    /**
+     * 회원별 적립금 사용 API
+     * @param memberId
+     */
+    @PutMapping("/members/{id}/reserve")
+    public void useReserve(@PathVariable("id") Long memberId) {
+        memberService.useReserve(memberId);
     }
 
-    @GetMapping("/members/{id}/reserves")
-    public List<Reserve> findReserves(@PathVariable("id") Long memberId) {
-        return reserveService.findAllReserves(memberId);
-    }
+    /**
+     * 회원별 적립금 사용 내역 조회 API
+     * @param memberId
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/members/{id}/reserve/accumulated-details")
+    public ResponseEntity<List<ReserveDto>> historyUseReserve(@RequestParam Long memberId,
+                                                              @RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "20") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
 
-    @Data
-    static class CreateMemberRequest {
-        private String name;
-        private int reserve;
-    }
-    @Data
-    static class CreateMemberResponse {
-        private Long id;
-        public CreateMemberResponse(Long id) {
-            this.id = id;
-        }
+        return ResponseEntity.ok(memberService.historyUseReserve(memberId, pageRequest));
     }
 }
