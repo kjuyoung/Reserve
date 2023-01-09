@@ -1,8 +1,10 @@
 package com.marketboro.reserve.controller;
 
+import com.marketboro.reserve.domain.discount.RateReservePolicy;
 import com.marketboro.reserve.domain.member.Member;
 import com.marketboro.reserve.domain.order.Order;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberControllerTest {
 
     private static final int RATERESERVE = 10;
+    @Autowired
+    private RateReservePolicy rateReservePolicy;
 
     @Test
     void findTotalReserve() {
@@ -30,10 +34,18 @@ class MemberControllerTest {
     @Test
     void order() {
         // given
+        int reserve = rateReservePolicy.calculateReserve(10000);
+        Member memberA = new Member("member_A", 0);
+        Order order = Order.createOrder(memberA, "book1", 10000, reserve);
+        memberA.saveOrder(order);
+
+        reserve += memberA.getTotalReserve();
+        memberA.setTotalReserve(reserve);
 
         // when
 
         // then
+//        assertThat()
     }
 
     @Test
