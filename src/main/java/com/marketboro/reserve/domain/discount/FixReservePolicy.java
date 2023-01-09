@@ -4,10 +4,10 @@ import org.springframework.stereotype.Component;
 
 public class FixReservePolicy implements ReservePolicy {
 
-    private int discountFixAmount = 1000;
+    private static final int FIXRESERVE = 1000;
 
     @Override
     public int calculateReserve(int price) {
-        return discountFixAmount;
+        return FIXRESERVE;
     }
 }
