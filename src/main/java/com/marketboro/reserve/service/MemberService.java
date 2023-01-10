@@ -95,6 +95,9 @@ public class MemberService {
 
         PageRequest pageRequest = PageRequest.of(0, 1);
         Order findOrder = orderRepository.findOne(memberId, pageRequest);
+        findOrder.setExpiryDate(findOrder.getCreatedDate().plusYears(1));
+        orderRepository.save(findOrder);
+
         if(findOrder.getExpiryDate().isBefore(LocalDateTime.now())) {
             throw new InvalidRequestException("적립금 유효기간인 1년이 경과하여 사용할 수 없습니다.");
         }

@@ -34,7 +34,6 @@ public class Order extends BaseTimeEntity {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.reserveFund = reserveFund;
-//        this.expiryDate = this.getCreatedDate().plusYears(1);
         if(member != null) {
             setMember(member);
         }
@@ -47,7 +46,6 @@ public class Order extends BaseTimeEntity {
         order.setItemName(itemName);
         order.setItemPrice(itemPrice);
         order.setReserveFund(reserveFund);
-//        order.setExpiryDate(order.getCreatedDate().plusYears(1));
         return order;
     }
 
