@@ -16,7 +16,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findAll(@Param("id") Long memberId, PageRequest pageRequest);
 
     @Query(value = "select o from Order o " +
-            "where o.itemPrice != 0 and o.reserveFund != 0 " +
+            "join fetch o.member m " +
+            "where m.id = :id and o.itemPrice != 0 and o.reserveFund != 0 " +
             "ORDER BY o.id asc")
-    Order findOne(PageRequest pageRequest);
+    Order findOne(@Param("id") Long memberId, PageRequest pageRequest);
 }

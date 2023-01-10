@@ -1,5 +1,7 @@
 package com.marketboro.reserve.controller;
 
+import com.marketboro.reserve.domain.member.Member;
+import com.marketboro.reserve.domain.member.MemberDto;
 import com.marketboro.reserve.domain.order.OrderDto;
 import com.marketboro.reserve.domain.reserve.ReserveDto;
 import com.marketboro.reserve.service.MemberService;
@@ -27,7 +29,7 @@ public class MemberController {
      * @return
      */
     @GetMapping("/members/{id}/total-reserve")
-    public ResponseEntity<Integer> findTotalReserve(@PathVariable("id") Long memberId) {
+    public ResponseEntity<MemberDto> findTotalReserve(@PathVariable("id") Long memberId) {
 
         return ResponseEntity.ok(memberService.findTotalReserve(memberId));
     }

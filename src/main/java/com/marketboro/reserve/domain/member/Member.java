@@ -42,6 +42,13 @@ public class Member {
     }
 
     @Builder
+    public Member(Long id, String name, int totalReserve) {
+        this.id = id;
+        this.name = name;
+        this.totalReserve = totalReserve;
+    }
+
+    @Builder
     public Member(String name, int totalReserve) {
         this.name = name;
         this.totalReserve = totalReserve;

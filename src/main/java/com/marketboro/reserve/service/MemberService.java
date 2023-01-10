@@ -1,11 +1,14 @@
 package com.marketboro.reserve.service;
 
 import com.marketboro.reserve.domain.discount.RateReservePolicy;
+import com.marketboro.reserve.domain.discount.ReservePolicy;
 import com.marketboro.reserve.domain.member.Member;
+import com.marketboro.reserve.domain.member.MemberDto;
 import com.marketboro.reserve.domain.order.Order;
 import com.marketboro.reserve.domain.order.OrderDto;
 import com.marketboro.reserve.domain.reserve.Reserve;
 import com.marketboro.reserve.domain.reserve.ReserveDto;
+import com.marketboro.reserve.exception.InvalidRequestException;
 import com.marketboro.reserve.repository.MemberRepository;
 import com.marketboro.reserve.repository.OrderRepository;
 import com.marketboro.reserve.repository.ReserveRepository;
@@ -27,17 +30,18 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final ReserveRepository reserveRepository;
-    private final RateReservePolicy rateReservePolicy;
+    private final ReservePolicy reservePolicy;
 
     /**
      * 회원별 적립금 합계 조회
      * @param id
      * @return 적립금 합계금액
      */
-    public int findTotalReserve(Long id) {
-        Optional<Member> member = memberRepository.findById(id);
+    public MemberDto findTotalReserve(Long id) {
+        Optional<Member> findMember = memberRepository.findById(id);
+        MemberDto memberDto = new MemberDto(findMember.get());
 
-        return member.get().getTotalReserve();
+        return memberDto;
     }
 
     /**
@@ -51,7 +55,7 @@ public class MemberService {
     public Long saveReserve(Long memberId, String itemName, int itemPrice) {
         Optional<Member> findMember = memberRepository.findById(memberId);
 
-        int reserve = rateReservePolicy.calculateReserve(itemPrice);
+        int reserve = reservePolicy.calculateReserve(itemPrice);
         Order order = Order.createOrder(findMember.get(), itemName, itemPrice, reserve);
         findMember.get().saveOrder(order);
 
@@ -86,17 +90,19 @@ public class MemberService {
         Optional<Member> findMember = memberRepository.findById(memberId);
 
         PageRequest pageRequest = PageRequest.of(0, 1);
-        Order findOrder = orderRepository.findOne(pageRequest);
+        Order findOrder = orderRepository.findOne(memberId, pageRequest);
 
         Reserve newReserve = Reserve.createReserve(findMember.get(), findOrder.getReserveFund());
         findMember.get().saveReserve(newReserve);
 
         if(findMember.get().getTotalReserve() - findOrder.getReserveFund() >= 0) {
             findMember.get().changeTotalReserve(findMember.get().getTotalReserve()-findOrder.getReserveFund());
+            findOrder.changeReserveFund(0);
+            reserveRepository.save(newReserve);
         }
-
-        findOrder.changeReserveFund(0);
-        reserveRepository.save(newReserve);
+        else {
+            throw new InvalidRequestException("회원 별 적립금 합계는 마이너스가 될 수 없습니다.");
+        }
 
         return newReserve.getId();
     }

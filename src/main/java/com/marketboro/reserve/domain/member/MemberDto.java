@@ -18,4 +18,10 @@ public class MemberDto {
         this.name = name;
         this.totalReserve = totalReserve;
     }
+
+    public MemberDto(Member member) {
+        this.id = member.getId();
+        this.name = member.getName();
+        this.totalReserve = member.getTotalReserve();
+    }
 }

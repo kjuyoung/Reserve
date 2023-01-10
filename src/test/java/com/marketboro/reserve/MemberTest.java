@@ -25,10 +25,10 @@ public class MemberTest {
         em.persist(member1);
         em.persist(member2);
 
-        Order orderA = new Order(member1, "itemA", 1000);
-        Order orderB = new Order(member1, "itemB", 2000);
-        Order orderC = new Order(member2, "itemC", 3000);
-        Order orderD = new Order(member2, "itemD", 4000);
+        Order orderA = new Order(member1, "itemA", 1000, 1000*10/100);
+        Order orderB = new Order(member1, "itemB", 2000, 2000*10/100);
+        Order orderC = new Order(member2, "itemC", 3000, 3000*10/100);
+        Order orderD = new Order(member2, "itemD", 4000, 4000*10/100);
         em.persist(orderA);
         em.persist(orderB);
         em.persist(orderC);

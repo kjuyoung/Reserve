@@ -5,10 +5,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class RateReservePolicy implements ReservePolicy {
 
-    private static final int RATERESERVE = 10;
+    private static final int RATE_RESERVE = 10;
 
     @Override
     public int calculateReserve(int price) {
-        return price * RATERESERVE / 100;
+        return price * RATE_RESERVE / 100;
     }
 }
