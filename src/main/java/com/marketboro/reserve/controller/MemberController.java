@@ -58,7 +58,7 @@ public class MemberController {
     @GetMapping("/members/{id}/reserve/usage-details")
     public ResponseEntity<List<OrderDto>> historySaveReserve(@RequestParam Long memberId,
                                                              @RequestParam(defaultValue = "0") int page,
-                                                             @RequestParam(defaultValue = "20") int size) {
+                                                             @RequestParam(defaultValue = "10") int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
 
         return ResponseEntity.ok(memberService.historySaveReserve(memberId, pageRequest));
@@ -83,7 +83,7 @@ public class MemberController {
     @GetMapping("/members/{id}/reserve/accumulated-details")
     public ResponseEntity<List<ReserveDto>> historyUseReserve(@RequestParam Long memberId,
                                                               @RequestParam(defaultValue = "0") int page,
-                                                              @RequestParam(defaultValue = "20") int size) {
+                                                              @RequestParam(defaultValue = "10") int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
 
         return ResponseEntity.ok(memberService.historyUseReserve(memberId, pageRequest));

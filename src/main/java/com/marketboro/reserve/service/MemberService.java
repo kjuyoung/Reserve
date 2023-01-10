@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,9 @@ public class MemberService {
         findMember.get().setTotalReserve(reserve);
 
         orderRepository.save(order);
+        PageRequest pageRequest = PageRequest.of(0, 1);
+        Order findOrder = orderRepository.findOne(memberId, pageRequest);
+        findOrder.setExpiryDate(findOrder.getCreatedDate().plusYears(1));
 
         return order.getId();
     }
@@ -91,6 +95,9 @@ public class MemberService {
 
         PageRequest pageRequest = PageRequest.of(0, 1);
         Order findOrder = orderRepository.findOne(memberId, pageRequest);
+        if(findOrder.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new InvalidRequestException("적립금 유효기간인 1년이 경과하여 사용할 수 없습니다.");
+        }
 
         Reserve newReserve = Reserve.createReserve(findMember.get(), findOrder.getReserveFund());
         findMember.get().saveReserve(newReserve);

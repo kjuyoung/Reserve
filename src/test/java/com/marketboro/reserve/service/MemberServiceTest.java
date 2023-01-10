@@ -17,9 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -136,16 +138,13 @@ class MemberServiceTest {
 
         int book1Reserve = reservePolicy.calculateReserve(20000);
         int book2Reserve = reservePolicy.calculateReserve(30000);
-        int book3Reserve = reservePolicy.calculateReserve(10000);
         Order book1 = Order.createOrder(memberA, "book1", 20000, book1Reserve);
         Order book2 = Order.createOrder(memberA, "book2", 30000, book2Reserve);
-        Order book3 = Order.createOrder(memberA, "book3", 10000, book3Reserve);
 
         // when
         memberRepository.save(memberA);
         orderRepository.save(book1);
         orderRepository.save(book2);
-        orderRepository.save(book3);
         PageRequest pageRequest = PageRequest.of(0, 1);
 
         for(int i=1; i<=2; i++) {
@@ -172,5 +171,32 @@ class MemberServiceTest {
         // then
         assertThat(findReserves.getSize()).isEqualTo(2);
         assertThat(findMember.get().getTotalReserve()).isEqualTo(5000);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("회원별 적립금 유효기간을 확인하는 테스트입니다.")
+    void 적립금_유효기간_확인_테스트() {
+        // given
+        Member memberA = new Member(1L, "member_A", 10000);
+
+        int book1Reserve = reservePolicy.calculateReserve(20000);
+        Order book1 = Order.createOrder(memberA, "book1", 20000, book1Reserve);
+
+        // when
+        orderRepository.save(book1);
+        PageRequest pageRequest = PageRequest.of(0, 1);
+        Order findOrder = orderRepository.findOne(1L, pageRequest);
+        findOrder.setExpiryDate(LocalDateTime.now().minusHours(1));
+
+        // then
+        assertThrows(InvalidRequestException.class,
+                () -> {expiryDateTest(findOrder);});
+    }
+
+    static public void expiryDateTest(Order order) {
+        if(order.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new InvalidRequestException("적립금 유효기간인 1년이 경과하여 사용할 수 없습니다.");
+        }
     }
 }

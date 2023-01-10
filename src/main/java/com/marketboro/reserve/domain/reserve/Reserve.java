@@ -31,7 +31,7 @@ public class Reserve {
         this.usedReserve = usedReserve;
     }
 
-    //==생성 메서드==//
+    // 생성 메서드
     public static Reserve createReserve(Member member, int usedReserve) {
         Reserve reserve = new Reserve();
         reserve.setMember(member);

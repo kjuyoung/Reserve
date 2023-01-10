@@ -1,16 +1,19 @@
 package com.marketboro.reserve.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.marketboro.reserve.domain.BaseTimeEntity;
 import com.marketboro.reserve.domain.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.Year;
 
 @Getter @Setter
 @Entity
 @Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order {
+public class Order extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,24 +27,27 @@ public class Order {
     private String itemName;
     private int itemPrice;
     private int reserveFund;
+    private LocalDateTime expiryDate;
 
     @Builder
     public Order(Member member, String itemName, int itemPrice, int reserveFund) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.reserveFund = reserveFund;
+//        this.expiryDate = this.getCreatedDate().plusYears(1);
         if(member != null) {
             setMember(member);
         }
     }
 
-    //==생성 메서드==//
+    // 생성 메서드
     public static Order createOrder(Member member, String itemName, int itemPrice, int reserveFund) {
         Order order = new Order();
         order.setMember(member);
         order.setItemName(itemName);
         order.setItemPrice(itemPrice);
         order.setReserveFund(reserveFund);
+//        order.setExpiryDate(order.getCreatedDate().plusYears(1));
         return order;
     }
 
