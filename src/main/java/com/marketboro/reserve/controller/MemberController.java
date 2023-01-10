@@ -6,6 +6,8 @@ import com.marketboro.reserve.domain.order.OrderDto;
 import com.marketboro.reserve.domain.reserve.ReserveDto;
 import com.marketboro.reserve.service.MemberService;
 
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Refill;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.List;
+import io.github.bucket4j.Bucket;
 
 @Slf4j
 @RestController
@@ -22,6 +26,16 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private Bucket bucket;
+
+    public Bucket generateBucket() {
+        //10분에 10개의 요청을 처리할 수 있는 Bucket 생성
+        Bandwidth limit = Bandwidth.classic(10, Refill.intervally(10, Duration.ofMinutes(10)));
+        this.bucket = Bucket.builder()
+                .addLimit(limit)
+                .build();
+        return bucket;
+    }
 
     /**
      * 회원별 적립금 합계 조회 API
