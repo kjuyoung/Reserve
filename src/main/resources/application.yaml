@@ -12,9 +12,6 @@ spring:
   config:
     activate:
       on-profile: common
-# local, dev, prod ?? ??
-#server:
-#  port: 8080
 
 ---
 
@@ -29,7 +26,6 @@ spring:
     password: 1234
     initialization-mode: always
     classpath: import.sql
-#    schema: classpath*:schema.sql
   jpa:
     generate-ddl: true
     defer-datasource-initialization: true
@@ -41,13 +37,10 @@ spring:
         format_sql: true
   sql:
     init:
-#      schema-locations=classpath: schema.sql
-#      mode: always
 
 logging:
   level:
     org.springframework.web.client: DEBUG
-    # org.hibernate.SQL: DEBUG
     org.hibernate.type: trace
 
 ---
