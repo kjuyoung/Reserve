@@ -32,12 +32,13 @@
 
 ## 실행방법
 
-- MySQL을 설치하고 실행한 후 데이터베이스명 reserve를 생성합니다.
+- MySQL을 설치하고 실행한 후 데이터베이스명 reserve를 생성합니다.  
+*DB url : jdbc:mysql://localhost:3306/reserve?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=Asia/Seoul*  
 ![database](./image/database.PNG)
 
 <br/>
 
-- 프로젝트를 실행하면 JPA에 의해 member, orders, reserve 테이블이 자동 생성됩니다.
+- 프로젝트를 실행하면 JPA에 의해 member, orders, reserve 테이블이 자동 생성됩니다.  
 ![tables](./image/tables.PNG)
 
 <br/>
