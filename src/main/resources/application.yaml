@@ -21,7 +21,7 @@ spring:
       on-profile: local_config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:13306/reserve?characterEncoding=UTF-8&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://mysql:3306/reserve?allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: 1234
     initialization-mode: always
