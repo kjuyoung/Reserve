@@ -3,7 +3,7 @@ insert into member(name, total_reserve) values('member_B', 50000);
 insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(1, 'book20', 10000, 1000, 2,'2023-01-11T00:01:24.838922');
 insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(2, 'book21', 20000, 2000, 2,'2023-01-11T00:01:24.838922');
 insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(3, 'book22', 30000, 3000, 2,'2023-01-11T00:01:24.838922');
-insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(4, 'book23', 40000, 4000, 2,'2023-01-11T00:01:24.838922';
+insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(4, 'book23', 40000, 4000, 2,'2023-01-11T00:01:24.838922');
 insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(5, 'book24', 50000, 5000, 2,'2023-01-11T00:01:24.838922');
 insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(6, 'book25', 60000, 6000, 2,'2023-01-11T00:01:24.838922');
 insert into orders(id, item_name, item_price, reserve_fund, member_id, created_date) values(7, 'book26', 70000, 7000, 2,'2023-01-11T00:01:24.838922');

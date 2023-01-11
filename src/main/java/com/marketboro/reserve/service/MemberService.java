@@ -1,6 +1,5 @@
 package com.marketboro.reserve.service;
 
-import com.marketboro.reserve.domain.discount.RateReservePolicy;
 import com.marketboro.reserve.domain.discount.ReservePolicy;
 import com.marketboro.reserve.domain.member.Member;
 import com.marketboro.reserve.domain.member.MemberDto;

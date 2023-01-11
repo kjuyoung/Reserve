@@ -54,6 +54,7 @@ class MemberControllerTest {
         memberA.setTotalReserve(reserve);
         memberRepository.save(memberA);
 
+
         // expect
         mockMvc.perform(MockMvcRequestBuilders.get(uri).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

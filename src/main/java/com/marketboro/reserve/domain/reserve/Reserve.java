@@ -2,7 +2,6 @@ package com.marketboro.reserve.domain.reserve;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marketboro.reserve.domain.member.Member;
-import com.marketboro.reserve.domain.order.Order;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
